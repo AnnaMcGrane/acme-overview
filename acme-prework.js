@@ -46,25 +46,59 @@ var lineItems = [
 //keys are the ids of products
 //the values are the products themselves
 function generateProductsMap(products){
-  //TODO
+  var productObj = {};
+  for (var i = 0; i< products.length; i++){
+    var key = products[i].id
+    productObj[key] = products[i];
+  }
+  return productObj;
 }
 
 //returns an object
 //keys are the ids of products
 //value is the total revenue for that product
 function salesByProduct(products, lineItems){
-  //TODO
+  var revenueObj = {};
+  for (var i = 0; i < lineItems.length; i++){
+    for (var j = 0; j < products.length; j++){
+          if (lineItems[i].productId === products[j].id){
+            var objKey = lineItems[i].productId;
+
+            if (revenueObj[objKey] === undefined){
+              revenueObj[objKey] = (lineItems[i].quantity*products[j].price);
+            }
+            else {
+              revenueObj[objKey] += (lineItems[i].quantity*products[j].price);
+            }
+          }
+      }
+  }
+  return revenueObj;
 }
 
 //return the total revenue for all products
 function totalSales(products, lineItems){
-  //TODO
-
+  var total = 0;
+  var salesRevenueObj = salesByProduct(products, lineItems);
+  for (var key in salesRevenueObj){
+    total += salesRevenueObj[key];
+  }
+  return total;
 }
 
 //return the product responsible for the most revenue
 function topSellerByRevenue(products, lineItems){
-  //TODO
+  var salesByProductObj = salesByProduct(products, lineItems);
+  var biggestSeller = null;
+  for (var key in salesByProductObj){
+    if (biggestSeller === null){
+      biggestSeller = key;
+    }
+    else if (salesByProductObj[key] > salesByProductObj[biggestSeller]){
+      biggestSeller = key;
+    }
+  }
+  return biggestSeller;
 }
 console.log(`generates product map - should be
 {
